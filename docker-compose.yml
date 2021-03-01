@@ -1,0 +1,30 @@
+version: '3'
+services:
+  railsapp:
+    container_name: rails-server-container
+    restart: always
+    build: ./
+    working_dir: /usr/src/app
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./:/usr/src/app
+    networks: 
+      - backend
+  nginxserver:
+    container_name: nginx-web-server
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    links:
+     - railsapp
+    networks: 
+    - backend
+networks:
+    backend:
+      driver: "bridge"
+volumes:
+  railsDB:
